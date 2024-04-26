@@ -6,13 +6,16 @@ import com.thecoderstv.springboottesting.Repository.EmployeeRepository;
 
 
 import org.assertj.core.api.Assertions;
+import org.junit.Assert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+
 import java.util.List;
+import java.util.Optional;
 
 
 // this annotation loads only repository layer components
@@ -68,5 +71,26 @@ public class EmployeeRepositoryTest {
         // then - verify the output
         Assertions.assertThat(employeeList).isNotNull();
         Assertions.assertThat(employeeList.size()).isEqualTo(2);
+
+    }
+
+    @DisplayName("Junit test for get employee by id operation")
+    @Test
+    public void givenEmployeeObject_whenFindEmployeeById_thenReturnEmployeeObject() {
+        // given - precondition setup
+        Employee employee1 = Employee.builder()
+                .firstName("Shubham")
+                .lastName("Nigam")
+                .email("nigamshubhamxxx@gmail.com")
+                .build();
+
+        Employee employee = employeeRepository.save(employee1);
+
+        // when - action or behaviour
+        Optional<Employee> savedEmployee = employeeRepository.findById(employee.getId());
+
+        // then - verify the output
+        Assertions.assertThat(savedEmployee).isNotNull();
+        Assert.assertEquals(employee.getId(),savedEmployee.get().getId());
     }
 }
