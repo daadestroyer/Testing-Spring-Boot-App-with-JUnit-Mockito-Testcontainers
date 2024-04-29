@@ -7,6 +7,7 @@ import com.thecoderstv.springboottesting.Repository.EmployeeRepository;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Assert;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -26,18 +27,28 @@ public class EmployeeRepositoryTest {
     @Autowired
     EmployeeRepository employeeRepository;
 
-    // Junit testcase for save employee operation
-    // following given_when_then condition
+    Employee employee;
 
-    @DisplayName("Junit test for save employee operation")
-    @Test
-    public void givenEmployeeObject_whenSave_thenReturnSavedEmployee() {
-        // given  - precondition or setup or sample data
-        Employee employee = Employee.builder()
+    @BeforeEach
+    public void setup() {
+        employee = Employee.builder()
                 .firstName("Shubham")
                 .lastName("Nigam")
                 .email("nigamshubhamxxx@gmail.com")
                 .build();
+    }
+
+    // Junit testcase for save employee operation
+    // following given_when_then condition
+    @DisplayName("Junit test for save employee operation")
+    @Test
+    public void givenEmployeeObject_whenSave_thenReturnSavedEmployee() {
+        // given  - precondition or setup or sample data
+//        Employee employee = Employee.builder()
+//                .firstName("Shubham")
+//                .lastName("Nigam")
+//                .email("nigamshubhamxxx@gmail.com")
+//                .build();
 
         // when - action or behaviour
         Employee savedEmployee = employeeRepository.save(employee);
@@ -50,11 +61,11 @@ public class EmployeeRepositoryTest {
     @Test
     public void givenEmployeeList_whenFindAll_thenEmployeeList() {
         // given - precondition setup
-        Employee employee1 = Employee.builder()
-                .firstName("Shubham")
-                .lastName("Nigam")
-                .email("nigamshubhamxxx@gmail.com")
-                .build();
+//        Employee employee1 = Employee.builder()
+//                .firstName("Shubham")
+//                .lastName("Nigam")
+//                .email("nigamshubhamxxx@gmail.com")
+//                .build();
 
         Employee employee2 = Employee.builder()
                 .firstName("Ram")
@@ -62,7 +73,7 @@ public class EmployeeRepositoryTest {
                 .email("ramnigam@gmail.com")
                 .build();
 
-        employeeRepository.save(employee1);
+        employeeRepository.save(employee);
         employeeRepository.save(employee2);
 
         // when - action or behaviour
@@ -78,16 +89,16 @@ public class EmployeeRepositoryTest {
     @Test
     public void givenEmployeeObject_whenFindEmployeeById_thenReturnEmployeeObject() {
         // given - precondition setup
-        Employee employee1 = Employee.builder()
-                .firstName("Shubham")
-                .lastName("Nigam")
-                .email("nigamshubhamxxx@gmail.com")
-                .build();
+//        Employee employee = Employee.builder()
+//                .firstName("Shubham")
+//                .lastName("Nigam")
+//                .email("nigamshubhamxxx@gmail.com")
+//                .build();
 
-        Employee employee = employeeRepository.save(employee1);
+        Employee emp = employeeRepository.save(employee);
 
         // when - action or behaviour
-        Optional<Employee> savedEmployee = employeeRepository.findById(employee.getId());
+        Optional<Employee> savedEmployee = employeeRepository.findById(emp.getId());
 
         // then - verify the output
         Assertions.assertThat(savedEmployee).isNotNull();
@@ -98,35 +109,35 @@ public class EmployeeRepositoryTest {
     @Test
     public void givenEmployeeObject_whenFindEmployeeByEmail_thenReturnEmployeeObject() {
         // given - precondition setup
-        Employee employee1 = Employee.builder()
-                .firstName("Shubham")
-                .lastName("Nigam")
-                .email("nigamshubhamxxx@gmail.com")
-                .build();
+//        Employee employee = Employee.builder()
+//                .firstName("Shubham")
+//                .lastName("Nigam")
+//                .email("nigamshubhamxxx@gmail.com")
+//                .build();
 
-        employeeRepository.save(employee1);
+        employeeRepository.save(employee);
 
         // when - action or behaviour
-        Employee empDB = employeeRepository.findByEmail(employee1.getEmail()).get();
+        Employee empDB = employeeRepository.findByEmail(employee.getEmail()).get();
 
         // then - verify the output
         Assertions.assertThat(empDB).isNotNull();
-        Assert.assertEquals(employee1.getEmail(), empDB.getEmail());
+        Assert.assertEquals(employee.getEmail(), empDB.getEmail());
     }
 
     @DisplayName("Junit test for update employee operation")
     @Test
     public void givenEmployeeObject_whenUpdateEmployee_thenReturnUpdatedEmployeeObject() {
         // given - precondition setup
-        Employee employee1 = Employee.builder()
-                .firstName("Shubham")
-                .lastName("Nigam")
-                .email("nigamshubhamxxx@gmail.com")
-                .build();
-        employeeRepository.save(employee1);
+//        Employee employee = Employee.builder()
+//                .firstName("Shubham")
+//                .lastName("Nigam")
+//                .email("nigamshubhamxxx@gmail.com")
+//                .build();
+        employeeRepository.save(employee);
 
         // when - action or behaviour
-        Employee savedEmp = employeeRepository.findById(employee1.getId()).get();
+        Employee savedEmp = employeeRepository.findById(employee.getId()).get();
         savedEmp.setFirstName("Shubham-updated");
         savedEmp.setEmail("shubham@gmail.com");
         Employee updatedEmp = employeeRepository.save(savedEmp);
@@ -140,16 +151,16 @@ public class EmployeeRepositoryTest {
     @Test
     public void givenEmployeeObject_whenDeleteEmployee_thenDeleteEmployeeObject() {
         // given - precondition setup
-        Employee employee1 = Employee.builder()
-                .firstName("Shubham")
-                .lastName("Nigam")
-                .email("nigamshubhamxxx@gmail.com")
-                .build();
-        employeeRepository.save(employee1);
+//        Employee employee = Employee.builder()
+//                .firstName("Shubham")
+//                .lastName("Nigam")
+//                .email("nigamshubhamxxx@gmail.com")
+//                .build();
+        employeeRepository.save(employee);
 
         // when - action or behaviour
-        employeeRepository.delete(employee1);
-        Optional<Employee> optionalEmployee = employeeRepository.findById(employee1.getId());
+        employeeRepository.delete(employee);
+        Optional<Employee> optionalEmployee = employeeRepository.findById(employee.getId());
 
         // then - verify the output
         Assertions.assertThat(optionalEmployee).isEmpty();
@@ -159,15 +170,15 @@ public class EmployeeRepositoryTest {
     @Test
     public void givenEmployeeFirstNameAndLastName_whenFindByJPQL_thenReturnEmployeeObject() {
         // given - precondition setup
-        Employee employee1 = Employee.builder()
-                .firstName("Shubham")
-                .lastName("Nigam")
-                .email("nigamshubhamxxx@gmail.com")
-                .build();
+//        Employee employee = Employee.builder()
+//                .firstName("Shubham")
+//                .lastName("Nigam")
+//                .email("nigamshubhamxxx@gmail.com")
+//                .build();
 
-        employeeRepository.save(employee1);
-        String firstName = employee1.getFirstName();
-        String lastName = employee1.getLastName();
+        employeeRepository.save(employee);
+        String firstName = employee.getFirstName();
+        String lastName = employee.getLastName();
 
         // when - action or behaviour
         Employee savedEmployee = employeeRepository.findByJPQL(firstName, lastName);
@@ -180,15 +191,15 @@ public class EmployeeRepositoryTest {
     @Test
     public void givenFirstNameAndLastName_whenFindByNativeQuery_thenReturnEmployeeObject() {
         // given - precondition setup
-        Employee employee1 = Employee.builder()
-                .firstName("Shubham")
-                .lastName("Nigam")
-                .email("nigamshubhamxxx@gmail.com")
-                .build();
-        employeeRepository.save(employee1);
+//        Employee employee = Employee.builder()
+//                .firstName("Shubham")
+//                .lastName("Nigam")
+//                .email("nigamshubhamxxx@gmail.com")
+//                .build();
+        employeeRepository.save(employee);
 
-        String firstName = employee1.getFirstName();
-        String lastName = employee1.getLastName();
+        String firstName = employee.getFirstName();
+        String lastName = employee.getLastName();
 
         // when - action or behaviour
         Employee savedEmployee = employeeRepository.findByNativeQuery(firstName, lastName);
@@ -201,15 +212,15 @@ public class EmployeeRepositoryTest {
     @Test
     public void givenFirstNameAndLastName_whenFindByNativeQueryNamed_thenReturnEmployeeObject() {
         // given - precondition setup
-        Employee employee1 = Employee.builder()
-                .firstName("Shubham")
-                .lastName("Nigam")
-                .email("nigamshubhamxxx@gmail.com")
-                .build();
-        employeeRepository.save(employee1);
+//        Employee employee = Employee.builder()
+//                .firstName("Shubham")
+//                .lastName("Nigam")
+//                .email("nigamshubhamxxx@gmail.com")
+//                .build();
+        employeeRepository.save(employee);
 
-        String firstName = employee1.getFirstName();
-        String lastName = employee1.getLastName();
+        String firstName = employee.getFirstName();
+        String lastName = employee.getLastName();
 
         // when - action or behaviour
         Employee savedEmployee = employeeRepository.findByNativeQueryNamed(firstName, lastName);
