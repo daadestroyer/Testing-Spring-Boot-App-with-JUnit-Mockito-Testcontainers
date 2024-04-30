@@ -92,15 +92,15 @@ public class EmployeeServiceTests {
     @Test
     public void givenEmployeeList_whenGetAllEmployees_thenReturnEmployeeList() {
         // given - precondition setup
-            // mock the internal method of getAllEmployee method of Service class
-            when(employeeRepository.findAll()).thenReturn(List.of(employee,new Employee(2L,"Ram","Singh","ram@gmail.com")));
+        // mock the internal method of getAllEmployee method of Service class
+        when(employeeRepository.findAll()).thenReturn(List.of(employee, new Employee(2L, "Ram", "Singh", "ram@gmail.com")));
 
         // when - action or behaviour
-            List<Employee> employeeList = employeeServiceImpl.getAllEmployees();
+        List<Employee> employeeList = employeeServiceImpl.getAllEmployees();
 
         // then - verify the output
-            assertThat(employeeList).isNotNull();
-            assertThat(employeeList.size()).isEqualTo(2);
+        assertThat(employeeList).isNotNull();
+        assertThat(employeeList.size()).isEqualTo(2);
     }
 
     // JUnit testcase to get all employees with empty list
@@ -117,5 +117,20 @@ public class EmployeeServiceTests {
         // then - verify the output
         assertThat(employeeList).isEmpty();
         assertThat(employeeList.size()).isEqualTo(0);
+    }
+
+    // JUnit testcase to get employee by id
+    @DisplayName("JUnit testcase to get employees by id")
+    @Test
+    public void givenEmployeeId_whenGetEmployeeById_thenReturnEmployeeObject() {
+        // given - precondition setup
+            // mock the internal method of getAllEmployee method of Service class
+            when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
+
+        // when - action or behaviour
+        Optional<Employee> employee = employeeServiceImpl.getEmployeeById(1L);
+
+        // then - verify the output
+        assertThat(employee).isNotNull();
     }
 }

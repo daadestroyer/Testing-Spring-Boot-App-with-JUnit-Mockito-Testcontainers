@@ -24,8 +24,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee saveEmployee(Employee employee) {
         Optional<Employee> employeeOptional = employeeRepository.findByEmail(employee.getEmail());
-        if(employeeOptional.isPresent()){
-            throw new ResourceNotFoundException("Employee already exist with given email : "+employee.getEmail());
+        if (employeeOptional.isPresent()) {
+            throw new ResourceNotFoundException("Employee already exist with given email : " + employee.getEmail());
         }
         return employeeRepository.save(employee);
     }
@@ -34,5 +34,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<Employee> getAllEmployees() {
         List<Employee> listOfEmp = employeeRepository.findAll();
         return listOfEmp;
+    }
+
+    @Override
+    public Optional<Employee> getEmployeeById(Long id) {
+        return employeeRepository.findById(id);
+
     }
 }
