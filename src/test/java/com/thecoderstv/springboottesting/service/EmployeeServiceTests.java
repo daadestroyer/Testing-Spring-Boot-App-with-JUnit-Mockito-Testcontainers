@@ -56,7 +56,7 @@ public class EmployeeServiceTests {
     @Test
     public void givenEmployeeObject_whenSaveEmployee_thenReturnEmployeeObject() {
         // given
-        // stubbing service method internal repository calls
+        // mock service method internal repository calls
         when(employeeRepository.findByEmail(employee.getEmail())).thenReturn(Optional.empty());
         when(employeeRepository.save(employee)).thenReturn(employee);
 
@@ -73,7 +73,7 @@ public class EmployeeServiceTests {
     @Test
     public void givenExistingEmail_whenSaveEmployee_thenThrowsException() {
         // given - precondition setup
-        // stubbing service method internal repository calls
+        // mock service method internal repository calls
         when(employeeRepository.findByEmail(employee.getEmail())).thenReturn(Optional.of(employee));
 
 
@@ -92,7 +92,7 @@ public class EmployeeServiceTests {
     @Test
     public void givenEmployeeList_whenGetAllEmployees_thenReturnEmployeeList() {
         // given - precondition setup
-            // stub the internal method of getAllEmployee method of Service class
+            // mock the internal method of getAllEmployee method of Service class
             when(employeeRepository.findAll()).thenReturn(List.of(employee,new Employee(2L,"Ram","Singh","ram@gmail.com")));
 
         // when - action or behaviour
@@ -103,4 +103,19 @@ public class EmployeeServiceTests {
             assertThat(employeeList.size()).isEqualTo(2);
     }
 
+    // JUnit testcase to get all employees with empty list
+    @DisplayName("JUnit testcase to get all employees with empty list")
+    @Test
+    public void givenEmptyEmployeeList_whenGetAllEmployees_thenReturnEmptyEmployeeList() {
+        // given - precondition setup
+        // mock the internal method of getAllEmployee method of Service class
+        when(employeeRepository.findAll()).thenReturn(List.of());
+
+        // when - action or behaviour
+        List<Employee> employeeList = employeeServiceImpl.getAllEmployees();
+
+        // then - verify the output
+        assertThat(employeeList).isEmpty();
+        assertThat(employeeList.size()).isEqualTo(0);
+    }
 }
