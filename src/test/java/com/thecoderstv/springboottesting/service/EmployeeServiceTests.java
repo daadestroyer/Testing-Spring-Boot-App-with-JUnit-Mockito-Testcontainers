@@ -133,4 +133,22 @@ public class EmployeeServiceTests {
         // then - verify the output
         assertThat(employee).isNotNull();
     }
+
+    // JUnit testcase to get employee by id negative case
+    @DisplayName("JUnit testcase to get employee by id negative case")
+    @Test
+    public void givenEmployeeId_whenGetEmployeeById_thenThrowsException() {
+        // given - precondition setup
+        // mock the internal method of getAllEmployee method of Service class
+        when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
+
+        // when - action or behaviour
+
+        Assertions.assertThrows(ResourceNotFoundException.class,()->{
+             employeeServiceImpl.getEmployeeById(1L);
+        });
+
+        // then - verify the output
+
+    }
 }
