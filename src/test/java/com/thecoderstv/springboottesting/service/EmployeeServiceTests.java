@@ -4,16 +4,21 @@ import com.thecoderstv.springboottesting.Model.Employee;
 import com.thecoderstv.springboottesting.Repository.EmployeeRepository;
 import com.thecoderstv.springboottesting.Service.EmployeeService;
 import com.thecoderstv.springboottesting.Service.Impl.EmployeeServiceImpl;
+
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.Assert.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+
 import static org.mockito.Mockito.*;
+
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class) // with this annotation we tell mockito that we used annotation for mocking
@@ -31,9 +36,9 @@ public class EmployeeServiceTests {
 
     @BeforeEach
     public void setup() {
-       //  employeeRepository = Mockito.mock(EmployeeRepository.class);
-     //   employeeService = new EmployeeServiceImpl(employeeRepository);
-        Employee employee = Employee.builder()
+        //  employeeRepository = Mockito.mock(EmployeeRepository.class);
+        //   employeeService = new EmployeeServiceImpl(employeeRepository);
+        employee = Employee.builder()
                 .id(1L)
                 .firstName("Shubham")
                 .lastName("Nigam")
@@ -46,7 +51,6 @@ public class EmployeeServiceTests {
     @Test
     public void givenEmployeeObject_whenSaveEmployee_thenReturnEmployeeObject() {
         // given
-
         // stubbing service method internal repository calls
         when(employeeRepository.findByEmail(employee.getEmail())).thenReturn(Optional.empty());
         when(employeeRepository.save(employee)).thenReturn(employee);
@@ -56,7 +60,24 @@ public class EmployeeServiceTests {
 
         // then
         assertThat(savedEmployee).isNotNull();
-        assertEquals(employee,savedEmployee);
+        assertEquals(employee, savedEmployee);
+    }
+
+    // Junit testcase for save employee method which throw a custom exception
+    @DisplayName("Junit testcase for save employee method which throw a custom exception")
+    @Test
+    public void givenExistingEmail_whenSaveEmployee_thenThrowsException() {
+        // given - precondition setup
+        // stubbing service method internal repository calls
+        when(employeeRepository.findByEmail(employee.getEmail())).thenReturn(Optional.of(employee));
+        when(employeeRepository.save(employee)).thenReturn(employee);
+
+        // when - action or behaviour
+        Employee savedEmployee = employeeServiceImpl.saveEmployee(employee);
+
+        // then - verify the output
+        assertThat(savedEmployee).isNotNull();
+        assertEquals(employee, savedEmployee);
     }
 
 
