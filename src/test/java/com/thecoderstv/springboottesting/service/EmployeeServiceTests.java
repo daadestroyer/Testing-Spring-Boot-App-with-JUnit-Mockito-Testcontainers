@@ -4,31 +4,41 @@ import com.thecoderstv.springboottesting.Model.Employee;
 import com.thecoderstv.springboottesting.Repository.EmployeeRepository;
 import com.thecoderstv.springboottesting.Service.EmployeeService;
 import com.thecoderstv.springboottesting.Service.Impl.EmployeeServiceImpl;
-import org.assertj.core.api.Assertions;
-import org.junit.Assert;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.Assert.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-
+import static org.mockito.Mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
-
+@ExtendWith(MockitoExtension.class) // with this annotation we tell mockito that we used annotation for mocking
 public class EmployeeServiceTests {
 
 
-    // we are going to test employee Service class
-    private EmployeeService employeeService;
-
-    // employee service class depends on employee repository
+    private Employee employee;
+    // Using @Mock to mock the repository and further this mock objects get injects in another mock object which is present below
+    @Mock
     private EmployeeRepository employeeRepository;
 
+    // As our service class depends on repository so @InjectMock mock the repository object in service
+    @InjectMocks
+    private EmployeeServiceImpl employeeServiceImpl;
 
     @BeforeEach
     public void setup() {
-        employeeRepository = Mockito.mock(EmployeeRepository.class);
-        employeeService = new EmployeeServiceImpl(employeeRepository);
+       //  employeeRepository = Mockito.mock(EmployeeRepository.class);
+     //   employeeService = new EmployeeServiceImpl(employeeRepository);
+        Employee employee = Employee.builder()
+                .id(1L)
+                .firstName("Shubham")
+                .lastName("Nigam")
+                .email("nigamshubhamxxx@gmail.com")
+                .build();
     }
 
     // Junit testcase for save employee method
@@ -36,22 +46,17 @@ public class EmployeeServiceTests {
     @Test
     public void givenEmployeeObject_whenSaveEmployee_thenReturnEmployeeObject() {
         // given
-        Employee employee = Employee.builder()
-                .id(1L)
-                .firstName("Shubham")
-                .lastName("Nigam")
-                .email("nigamshubhamxxx@gmail.com")
-                .build();
+
         // stubbing service method internal repository calls
-        Mockito.when(employeeRepository.findByEmail(employee.getEmail())).thenReturn(Optional.empty());
-        Mockito.when(employeeRepository.save(employee)).thenReturn(employee);
+        when(employeeRepository.findByEmail(employee.getEmail())).thenReturn(Optional.empty());
+        when(employeeRepository.save(employee)).thenReturn(employee);
 
         // when
-        Employee savedEmployee = employeeService.saveEmployee(employee);
+        Employee savedEmployee = employeeServiceImpl.saveEmployee(employee);
 
         // then
-        Assertions.assertThat(savedEmployee).isNotNull();
-        Assert.assertEquals(employee,savedEmployee);
+        assertThat(savedEmployee).isNotNull();
+        assertEquals(employee,savedEmployee);
     }
 
 
