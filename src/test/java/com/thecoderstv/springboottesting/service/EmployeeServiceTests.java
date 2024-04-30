@@ -1,13 +1,16 @@
 package com.thecoderstv.springboottesting.service;
 
+import com.thecoderstv.springboottesting.Exception.ResourceNotFoundException;
 import com.thecoderstv.springboottesting.Model.Employee;
 import com.thecoderstv.springboottesting.Repository.EmployeeRepository;
-import com.thecoderstv.springboottesting.Service.EmployeeService;
 import com.thecoderstv.springboottesting.Service.Impl.EmployeeServiceImpl;
 
 import static org.assertj.core.api.Assertions.*;
+
 import static org.junit.Assert.*;
 
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +21,7 @@ import org.mockito.Mock;
 import static org.mockito.Mockito.*;
 
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.util.Optional;
 
@@ -70,14 +74,16 @@ public class EmployeeServiceTests {
         // given - precondition setup
         // stubbing service method internal repository calls
         when(employeeRepository.findByEmail(employee.getEmail())).thenReturn(Optional.of(employee));
-        when(employeeRepository.save(employee)).thenReturn(employee);
+
 
         // when - action or behaviour
-        Employee savedEmployee = employeeServiceImpl.saveEmployee(employee);
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> {
+            employeeServiceImpl.saveEmployee(employee);
+        });
 
-        // then - verify the output
-        assertThat(savedEmployee).isNotNull();
-        assertEquals(employee, savedEmployee);
+        // then
+        // from here we are verifying, after throw statement control won't go to the next statement
+        verify(employeeRepository,never()).save(any(Employee.class));
     }
 
 
