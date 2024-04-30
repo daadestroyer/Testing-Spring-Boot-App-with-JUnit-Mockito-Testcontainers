@@ -23,6 +23,7 @@ import static org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.ResourceAccessException;
 
+import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class) // with this annotation we tell mockito that we used annotation for mocking
@@ -83,8 +84,23 @@ public class EmployeeServiceTests {
 
         // then
         // from here we are verifying, after throw statement control won't go to the next statement
-        verify(employeeRepository,never()).save(any(Employee.class));
+        verify(employeeRepository, never()).save(any(Employee.class));
     }
 
+    // JUnit testcase to get all employees
+    @DisplayName("JUnit testcase to get all employees")
+    @Test
+    public void givenEmployeeList_whenGetAllEmployees_thenReturnEmployeeList() {
+        // given - precondition setup
+            // stub the internal method of getAllEmployee method of Service class
+            when(employeeRepository.findAll()).thenReturn(List.of(employee,new Employee(2L,"Ram","Singh","ram@gmail.com")));
+
+        // when - action or behaviour
+            List<Employee> employeeList = employeeServiceImpl.getAllEmployees();
+
+        // then - verify the output
+            assertThat(employeeList).isNotNull();
+            assertThat(employeeList.size()).isEqualTo(2);
+    }
 
 }
