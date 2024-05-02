@@ -10,11 +10,15 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.Assert.*;
 
 
+import org.assertj.core.api.BDDAssumptions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import static org.mockito.BDDMockito.*;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
@@ -161,10 +165,23 @@ public class EmployeeServiceTests {
         employee.setEmail("update@gmail.com");
 
         // when - action or behaviour
-        Employee updatedEmp = employeeRepository.save(employee);
+        Employee updatedEmp = employeeServiceImpl.updateEmployee(employee);
 
         // then - verify the output
         assertThat(updatedEmp).isNotNull();
         assertThat(updatedEmp.getEmail()).isEqualTo("update@gmail.com");
+    }
+
+    @DisplayName("JUnit testcase to delete employee by id")
+    @Test
+    public void givenEmployeeId_whenDeleteEmployee_thenNothing() {
+        // given - precondition setup
+        doNothing().when(employeeRepository).deleteById(1L);
+
+        // when - action or behaviour
+        employeeServiceImpl.deleteEmployee(1L);
+
+        // then - verify the output
+        verify(employeeRepository,times(1)).deleteById(1L);
     }
 }
