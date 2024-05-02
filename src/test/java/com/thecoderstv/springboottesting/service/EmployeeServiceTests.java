@@ -11,6 +11,7 @@ import static org.junit.Assert.*;
 
 
 import org.assertj.core.api.BDDAssumptions;
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -172,6 +173,23 @@ public class EmployeeServiceTests {
         assertThat(updatedEmp.getEmail()).isEqualTo("update@gmail.com");
     }
 
+    @DisplayName("JUnit testcase to update employee negative case")
+    @Test
+    public void givenEmployeeObject_whenUpdateEmployee_thenThrowException() {
+        Employee nonExistentEmployee = new Employee();
+        nonExistentEmployee.setId(9999L); // Assuming ID 9999 does not exist in the database// Attempt to update the non-existent employee
+        try {
+            employeeServiceImpl.updateEmployee(nonExistentEmployee);
+            // If the above line does not throw an exception, fail the test
+            Assert.fail();
+        } catch (ResourceNotFoundException e) {
+            // Assert that the exception message contains the correct error message
+            assertTrue(e.getMessage().contains("Employee with id 9999 not found"));
+        }
+
+    }
+
+
     @DisplayName("JUnit testcase to delete employee by id")
     @Test
     public void givenEmployeeId_whenDeleteEmployee_thenNothing() {
@@ -182,6 +200,23 @@ public class EmployeeServiceTests {
         employeeServiceImpl.deleteEmployee(1L);
 
         // then - verify the output
-        verify(employeeRepository,times(1)).deleteById(1L);
+        verify(employeeRepository, times(1)).deleteById(1L);
+    }
+
+    @DisplayName("JUnit testcase to delete employee by id negative case")
+    @Test
+    public void givenEmployeeId_whenDeleteEmployee_thenThrowException() {
+        // Assuming ID 9999 does not exist in the database
+        Long id = 9999L;
+
+        // Attempt to delete the non-existent employee
+        try {
+            employeeServiceImpl.deleteEmployee(id);
+            fail();
+        } catch (ResourceNotFoundException e) {
+            // Assert that the exception message contains the correct error message
+            assertTrue(e.getMessage().contains("Employee with id " + id + " not found"));
+        }
+
     }
 }
