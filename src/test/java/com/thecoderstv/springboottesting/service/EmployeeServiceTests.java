@@ -124,8 +124,8 @@ public class EmployeeServiceTests {
     @Test
     public void givenEmployeeId_whenGetEmployeeById_thenReturnEmployeeObject() {
         // given - precondition setup
-            // mock the internal method of getAllEmployee method of Service class
-            when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
+        // mock the internal method of getAllEmployee method of Service class
+        when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
 
         // when - action or behaviour
         Optional<Employee> employee = employeeServiceImpl.getEmployeeById(1L);
@@ -144,11 +144,27 @@ public class EmployeeServiceTests {
 
         // when - action or behaviour
 
-        Assertions.assertThrows(ResourceNotFoundException.class,()->{
-             employeeServiceImpl.getEmployeeById(1L);
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> {
+            employeeServiceImpl.getEmployeeById(1L);
         });
 
         // then - verify the output
 
+    }
+
+    @DisplayName("JUnit testcase to update employee")
+    @Test
+    public void givenEmployeeObject_whenUpdateEmployee_thenReturnEmployeeObject() {
+        // given - precondition setup
+        // mock the internal call of updateEmployee Object
+        when(employeeRepository.save(employee)).thenReturn(employee);
+        employee.setEmail("update@gmail.com");
+
+        // when - action or behaviour
+        Employee updatedEmp = employeeRepository.save(employee);
+
+        // then - verify the output
+        assertThat(updatedEmp).isNotNull();
+        assertThat(updatedEmp.getEmail()).isEqualTo("update@gmail.com");
     }
 }
