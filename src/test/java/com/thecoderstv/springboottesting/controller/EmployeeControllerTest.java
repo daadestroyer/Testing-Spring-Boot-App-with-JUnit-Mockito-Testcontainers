@@ -20,9 +20,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcResultMatchersDsl;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -48,7 +47,7 @@ public class EmployeeControllerTest {
         when(employeeService.saveEmployee(ArgumentMatchers.any())).thenAnswer((invocation) -> invocation.getArgument(0));
 
         // when - action or behaviour
-        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.post("/api/employees/create-employee")
+        ResultActions response = mockMvc.perform(post("/api/employees/create-employee")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(employee)));
 
@@ -71,7 +70,7 @@ public class EmployeeControllerTest {
         when(employeeService.getAllEmployees()).thenReturn(employeeList);
 
         // when - action or behaviour
-        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/api/employees/get-all-employee"));
+        ResultActions response = mockMvc.perform(get("/api/employees/get-all-employee"));
 
         // then - verify the output
         response
