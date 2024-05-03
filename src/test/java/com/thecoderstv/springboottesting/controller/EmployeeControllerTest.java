@@ -23,8 +23,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MockMvcResultMatchersDsl;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.List;
 
@@ -54,11 +54,11 @@ public class EmployeeControllerTest {
 
 
         // then - verify the output
-        response.andDo(MockMvcResultHandlers.print()).
-                andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value("Shubham"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value("Nigam"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("shubham@gmail.com"));
+        response.andDo(print()).
+                andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName").value("Shubham"))
+                .andExpect(jsonPath("$.lastName").value("Nigam"))
+                .andExpect(jsonPath("$.email").value("shubham@gmail.com"));
     }
 
     @DisplayName("JUnit testcase for Employee Controller to get all employee")
@@ -75,9 +75,9 @@ public class EmployeeControllerTest {
 
         // then - verify the output
         response
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.size()",CoreMatchers.is(employeeList.size())));
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.size()",CoreMatchers.is(employeeList.size())));
 
     }
 
