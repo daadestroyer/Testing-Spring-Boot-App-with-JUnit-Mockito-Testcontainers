@@ -121,4 +121,33 @@ public class EmployeeControllerTest {
 
     }
 
+    @DisplayName("JUnit testcase for update employee by id [possitive scenario - valid id]")
+    @Test
+    public void givenUpdatedEmployee_whenUpdateEmployee_thenReturnUpdatedEmployeeObject() throws Exception {
+        // given - precondition setup
+        // employee which is already in db
+        Long empId = 1L;
+        Employee savedEmp = Employee.builder().id(1L).firstName("Ram").lastName("Nigam").email("ram@gmail.com").build();
+
+        // updated employee
+        Employee updatedEmp = Employee.builder().id(1L).firstName("Ramnew").lastName("Nigamnew").email("ram@gmail.com").build();
+
+        // when - action or behaviour
+        when(employeeService.updateEmployee(updatedEmp)).thenReturn(updatedEmp);
+
+
+        // then - verify the output
+        ResultActions response = mockMvc.perform(put("/api/employees")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedEmp)));
+
+        response
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName", is(updatedEmp.getFirstName())))
+                .andExpect(jsonPath("$.lastName", is(updatedEmp.getLastName())))
+                .andExpect(jsonPath("$.email", is(updatedEmp.getEmail())));
+
+
+    }
+
 }

@@ -37,4 +37,10 @@ public class EmployeeController {
 
     }
 
+    @PutMapping
+    public ResponseEntity<?> updateEmployee(@RequestBody Employee employee){
+        Employee savedEmp = employeeService.updateEmployee(employee);
+        return new ResponseEntity<>(savedEmp,HttpStatus.OK);
+    }
+
 }
