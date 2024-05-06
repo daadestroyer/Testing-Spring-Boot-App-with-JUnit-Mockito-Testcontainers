@@ -4,9 +4,12 @@ import com.thecoderstv.springboottesting.Model.Employee;
 import com.thecoderstv.springboottesting.Service.EmployeeService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -22,6 +25,16 @@ public class EmployeeController {
     @GetMapping("/get-all-employee")
     public List<Employee> getAllEmployee(){
         return employeeService.getAllEmployees();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getEmployee(@PathVariable Long id){
+        Optional<Employee> employeeById = employeeService.getEmployeeById(id);
+        if(employeeById.isPresent()){
+            return new ResponseEntity<>(employeeById, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Employee Not Found",HttpStatus.NOT_FOUND);
+
     }
 
 }
