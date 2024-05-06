@@ -11,9 +11,7 @@ import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatcher;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
+import org.mockito.*;
 
 import static org.mockito.Mockito.*;
 
@@ -147,7 +145,49 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$.lastName", is(updatedEmp.getLastName())))
                 .andExpect(jsonPath("$.email", is(updatedEmp.getEmail())));
 
-
     }
 
+    @DisplayName("JUnit testcase for update employee by id [negative scenario - invalid id]")
+    @Test
+    public void givenUpdatedEmployee_whenUpdateEmployee_thenReturn404() throws Exception {
+        // given - precondition setup
+        // employee which is already in db
+        Long empId = 1L;
+        Employee savedEmp = Employee.builder().id(1L).firstName("Ram").lastName("Nigam").email("ram@gmail.com").build();
+
+        // updated employee
+        Employee updatedEmp = Employee.builder().id(1L).firstName("Ramnew").lastName("Nigamnew").email("ram@gmail.com").build();
+
+        // when - action or behaviour
+        when(employeeService.updateEmployee(updatedEmp)).thenReturn(updatedEmp);
+
+
+        // then - verify the output
+        ResultActions response = mockMvc.perform(put("/api/employees")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedEmp)));
+
+        response
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName", is(updatedEmp.getFirstName())))
+                .andExpect(jsonPath("$.lastName", is(updatedEmp.getLastName())))
+                .andExpect(jsonPath("$.email", is(updatedEmp.getEmail())));
+    }
+
+    @DisplayName("Junit testcase for delete employee by id")
+    @Test
+    public void givenEmployeeId_whenDeleteEmployeeById_thenReturnMessage() throws Exception {
+        // given - precondition setup
+        doNothing().when(employeeService).deleteEmployee(anyLong());
+
+
+        // when - action or behaviou    r
+        ResultActions response = mockMvc.perform(delete("/api/employees/{id}", 2L));
+
+        // then - verify the output
+        response
+                .andExpect(status().isOk());
+
+
+    }
 }
