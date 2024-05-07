@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -168,6 +170,23 @@ public class EmployeeControllerIntegrationTests {
 
         response
                 .andExpect(status().isNotFound());
+
+    }
+
+    @DisplayName("Junit integration testcase for delete employee by id")
+    @Test
+    public void givenEmployeeId_whenDeleteEmployeeById_thenReturnMessage() throws Exception {
+        // given - precondition setup
+        Employee savedEmp = Employee.builder().firstName("Ram").lastName("Nigam").email("ram@gmail.com").build();
+        employeeRepository.save(savedEmp);
+
+        // when - action or behaviou    r
+        ResultActions response = mockMvc.perform(delete("/api/employees/{id}", savedEmp.getId()));
+
+        // then - verify the output
+        response
+                .andExpect(status().isOk());
+
 
     }
 
