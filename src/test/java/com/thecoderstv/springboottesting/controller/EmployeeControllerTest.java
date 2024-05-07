@@ -152,15 +152,12 @@ public class EmployeeControllerTest {
     public void givenUpdatedEmployee_whenUpdateEmployee_thenReturn404() throws Exception {
         // given - precondition setup
         // employee which is already in db
-        Long empId = 1L;
-        Employee savedEmp = Employee.builder().id(1L).firstName("Ram").lastName("Nigam").email("ram@gmail.com").build();
 
         // updated employee
-        Employee updatedEmp = Employee.builder().id(1L).firstName("Ramnew").lastName("Nigamnew").email("ram@gmail.com").build();
+        Employee updatedEmp = Employee.builder().id(121L).firstName("Ramnew").lastName("Nigamnew").email("ram@gmail.com").build();
 
         // when - action or behaviour
         when(employeeService.updateEmployee(updatedEmp)).thenReturn(updatedEmp);
-
 
         // then - verify the output
         ResultActions response = mockMvc.perform(put("/api/employees")
@@ -168,10 +165,8 @@ public class EmployeeControllerTest {
                 .content(objectMapper.writeValueAsString(updatedEmp)));
 
         response
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.firstName", is(updatedEmp.getFirstName())))
-                .andExpect(jsonPath("$.lastName", is(updatedEmp.getLastName())))
-                .andExpect(jsonPath("$.email", is(updatedEmp.getEmail())));
+                .andExpect(status().isNotFound());
+
     }
 
     @DisplayName("Junit testcase for delete employee by id")

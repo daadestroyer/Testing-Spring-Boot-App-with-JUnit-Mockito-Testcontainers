@@ -103,7 +103,7 @@ public class EmployeeControllerIntegrationTests {
                 .andExpect(jsonPath("$.email", is(employee.getEmail())));
     }
 
-    @DisplayName("JUnit testcase for Employee Controller to get employee by id [negative scenario - invalid employee id")
+    @DisplayName("JUnit integration testcase for Employee Controller to get employee by id [negative scenario - invalid employee id")
     @Test
     public void given_when_then() throws Exception {
         // given - precondition setup
@@ -121,7 +121,7 @@ public class EmployeeControllerIntegrationTests {
 
     }
 
-    @DisplayName("JUnit testcase for update employee by id [possitive scenario - valid id]")
+    @DisplayName("JUnit integration testcase for update employee by id [possitive scenario - valid id]")
     @Test
     public void givenUpdatedEmployee_whenUpdateEmployee_thenReturnUpdatedEmployeeObject() throws Exception {
         // given - precondition setup
@@ -148,5 +148,28 @@ public class EmployeeControllerIntegrationTests {
                 .andExpect(jsonPath("$.email", is(employee.getEmail())));
 
     }
+
+    @DisplayName("JUnit integration testcase for update employee by id [negative scenario - invalid id]")
+    @Test
+    public void givenUpdatedEmployee_whenUpdateEmployee_thenReturn404() throws Exception {
+        // given - precondition setup
+        // employee which is already in db
+        Long empId = 1L;
+        Employee savedEmp = Employee.builder().firstName("Ram").lastName("Nigam").email("ram@gmail.com").build();
+        employeeRepository.save(savedEmp);
+
+        // updated employee
+        Employee updatedEmp = Employee.builder().id(121L).firstName("Ramnew").lastName("Nigamnew").email("ram@gmail.com").build();
+
+        // then - verify the output
+        ResultActions response = mockMvc.perform(put("/api/employees")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedEmp)));
+
+        response
+                .andExpect(status().isNotFound());
+
+    }
+
 
 }

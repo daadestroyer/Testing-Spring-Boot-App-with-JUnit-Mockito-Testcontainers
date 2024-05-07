@@ -46,7 +46,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee updateEmployee(Employee employee) {
         Optional<Employee> employeeOptional = employeeRepository.findById(employee.getId());
         if(employeeOptional.isEmpty()){
-            throw new ResourceNotFoundException("Employee with id " + employee.getId()+" not found");
+            return null;
         }
         return employeeRepository.save(employee);
 
