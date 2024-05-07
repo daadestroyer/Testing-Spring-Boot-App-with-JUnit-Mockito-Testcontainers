@@ -37,7 +37,7 @@ public class EmployeeControllerIntegrationTests {
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    void setup(){
+    void setup() {
         employeeRepository.deleteAll();
     }
 
@@ -47,7 +47,7 @@ public class EmployeeControllerIntegrationTests {
         // given - precondition setup
         Employee employee = Employee.builder().firstName("Shubham").lastName("Nigam").email("shubham@gmail.com").build();
 
-         // we need to remove mocking statement as this is the integration testing
+        // we need to remove mocking statement as this is the integration testing
 //        when(employeeService.saveEmployee(ArgumentMatchers.any())).thenAnswer((invocation) -> invocation.getArgument(0));
 
         // when - action or behaviour
@@ -102,6 +102,24 @@ public class EmployeeControllerIntegrationTests {
                 .andExpect(jsonPath("$.firstName", is(employee.getFirstName())))
                 .andExpect(jsonPath("$.lastName", is(employee.getLastName())))
                 .andExpect(jsonPath("$.email", is(employee.getEmail())));
+    }
+
+    @DisplayName("JUnit testcase for Employee Controller to get employee by id [negative scenario - invalid employee id")
+    @Test
+    public void given_when_then() throws Exception {
+        // given - precondition setup
+        long empId = 1L;
+        Employee employee = Employee.builder().firstName("Shubham").lastName("Nigam").email("shubham@gmail.com").build();
+        employeeRepository.save(employee);
+
+        // when - action or behaviour
+        ResultActions response = mockMvc.perform(get("/api/employees/{id}", empId));
+
+        // then - verify the output
+        response
+                .andExpect(status().isNotFound())
+                .andDo(print());
+
     }
 
 
