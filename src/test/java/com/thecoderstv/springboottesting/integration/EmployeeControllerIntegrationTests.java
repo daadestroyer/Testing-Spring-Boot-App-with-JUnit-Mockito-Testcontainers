@@ -19,8 +19,7 @@ import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -122,5 +121,32 @@ public class EmployeeControllerIntegrationTests {
 
     }
 
+    @DisplayName("JUnit testcase for update employee by id [possitive scenario - valid id]")
+    @Test
+    public void givenUpdatedEmployee_whenUpdateEmployee_thenReturnUpdatedEmployeeObject() throws Exception {
+        // given - precondition setup
+        // employee which is already in db
+        Employee employee = Employee.builder().firstName("Ram").lastName("Nigam").email("ram@gmail.com").build();
+
+        employeeRepository.save(employee);
+
+        // updated employee
+        employee.setFirstName("Ramupdate");
+        employee.setLastName("Nigamupdate");
+        employee.setEmail("ramupdate@gmail.com");
+
+
+        // then - verify the output
+        ResultActions response = mockMvc.perform(put("/api/employees")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(employee)));
+
+        response
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName", is(employee.getFirstName())))
+                .andExpect(jsonPath("$.lastName", is(employee.getLastName())))
+                .andExpect(jsonPath("$.email", is(employee.getEmail())));
+
+    }
 
 }
