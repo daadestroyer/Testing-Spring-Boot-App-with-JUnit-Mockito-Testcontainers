@@ -173,7 +173,7 @@ public class EmployeeControllerIntegrationTests {
 
     }
 
-    @DisplayName("Junit integration testcase for delete employee by id")
+    @DisplayName("Junit integration testcase for delete employee by id - possitive case")
     @Test
     public void givenEmployeeId_whenDeleteEmployeeById_thenReturnMessage() throws Exception {
         // given - precondition setup
