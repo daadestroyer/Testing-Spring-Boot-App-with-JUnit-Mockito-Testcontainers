@@ -14,7 +14,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -59,5 +63,24 @@ public class EmployeeControllerIntegrationTests {
                 .andExpect(jsonPath("$.email").value("shubham@gmail.com"));
     }
 
+
+    @DisplayName("JUnit integration testcase for Employee Controller to get all employee")
+    @Test
+    public void givenListOfEmployee_whenGetAllEmployee_thenReturnEmployeeList() throws Exception {
+        // given - precondition setup
+        List<Employee> employeeList = List.of(
+                Employee.builder().firstName("Shubham").lastName("Nigam").email("shubham@gmail.com").build(), Employee.builder().firstName("Ram").lastName("Singh").email("ram@gmail.com").build()
+        );
+
+        employeeRepository.saveAll(employeeList);
+        // when - action or behaviour
+        ResultActions response = mockMvc.perform(get("/api/employees/get-all-employee"));
+
+        // then - verify the output
+        response
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.size()", is(employeeList.size())));
+    }
 
 }
